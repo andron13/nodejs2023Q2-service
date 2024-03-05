@@ -1,5 +1,13 @@
 ## Задание: REST сервис
 
+## Nest cli Support
+
+* `nest generate --help` все команды
+* Для **быстрого создания CRUD контроллера** со встроенной валидацией, вы можете использовать CRUD-генератор CLI: $ `nest g resource cats`.
+* Чтобы создать контроллер с помощью CLI, просто выполните команду $ `nest g controller cats`.
+* Чтобы создать сервис с помощью CLI, просто выполните команду $ `nest g service cats`.
+* Чтобы создать module с помощью CLI, просто выполните команду $ `nest g module cats`.
+
 ### Описание
 
 Ссылка на задание - [rest-service/assignment](https://github.com/AlreadyBored/nodejs-assignments/blob/main/assignments/rest-service/assignment.md)
