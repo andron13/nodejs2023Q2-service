@@ -8,6 +8,13 @@
 * Чтобы создать сервис с помощью CLI, просто выполните команду $ `nest g service cats`.
 * Чтобы создать module с помощью CLI, просто выполните команду $ `nest g module cats`.
 
+```bash
+nest g res user(s)
+nest g res artist(s)
+nest g res track(s)
+nest g res album(s)
+nest g res favorite(s)
+```
 ### Описание
 
 Ссылка на задание - [rest-service/assignment](https://github.com/AlreadyBored/nodejs-assignments/blob/main/assignments/rest-service/assignment.md)
