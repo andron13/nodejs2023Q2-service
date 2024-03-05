@@ -1,7 +1,10 @@
-import { DocumentBuilder } from '@nestjs/swagger';
+import { readFileSync } from 'fs';
+import { join } from 'path';
 
-export const swaggerConfig = new DocumentBuilder()
-  .setTitle('Evening Academy')
-  .setDescription('The Evening Academy API description')
-  .setVersion('1.0')
-  .build();
+import * as YAML from 'yamljs';
+
+const yamlDocument = readFileSync(
+  join(__dirname, '../../doc/api.yaml'),
+  'utf8',
+);
+export const swaggerConfig = YAML.parse(yamlDocument);
