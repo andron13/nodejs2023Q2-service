@@ -7,9 +7,10 @@ import {
   Param,
   Delete,
 } from '@nestjs/common';
-import { FavoritesService } from './favorites.service';
+
 import { CreateFavoriteDto } from './dto/create-favorite.dto';
 import { UpdateFavoriteDto } from './dto/update-favorite.dto';
+import { FavoritesService } from './favorites.service';
 
 @Controller('favorites')
 export class FavoritesController {

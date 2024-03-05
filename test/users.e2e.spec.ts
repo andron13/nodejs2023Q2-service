@@ -1,12 +1,13 @@
-import { validate } from 'uuid';
 import { StatusCodes } from 'http-status-codes';
+import { validate } from 'uuid';
+
+import { usersRoutes } from './endpoints';
 import { request } from './lib';
 import {
   getTokenAndUserId,
   shouldAuthorizationBeTested,
   removeTokenUser,
 } from './utils';
-import { usersRoutes } from './endpoints';
 
 const createUserDto = {
   login: 'TEST_LOGIN',

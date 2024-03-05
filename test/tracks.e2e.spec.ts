@@ -1,12 +1,13 @@
-import { validate } from 'uuid';
 import { StatusCodes } from 'http-status-codes';
+import { validate } from 'uuid';
+
+import { tracksRoutes } from './endpoints';
 import { request } from './lib';
 import {
   getTokenAndUserId,
   shouldAuthorizationBeTested,
   removeTokenUser,
 } from './utils';
-import { tracksRoutes } from './endpoints';
 
 const createTrackDto = {
   name: 'TEST_TRACK',

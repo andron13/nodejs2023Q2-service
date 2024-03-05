@@ -1,16 +1,17 @@
-import { request } from './lib';
 import { StatusCodes } from 'http-status-codes';
-import {
-  getTokenAndUserId,
-  shouldAuthorizationBeTested,
-  removeTokenUser,
-} from './utils';
+
 import {
   albumsRoutes,
   artistsRoutes,
   tracksRoutes,
   favoritesRoutes,
 } from './endpoints';
+import { request } from './lib';
+import {
+  getTokenAndUserId,
+  shouldAuthorizationBeTested,
+  removeTokenUser,
+} from './utils';
 
 const createAlbumDto = {
   name: 'TEST_ALBUM',

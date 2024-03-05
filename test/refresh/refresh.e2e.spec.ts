@@ -1,14 +1,15 @@
-import request from '../lib/request';
+import { HttpStatus } from '@nestjs/common';
+import { decode, JwtPayload } from 'jsonwebtoken';
+import { validate } from 'uuid';
+
 import { authRoutes } from '../endpoints';
+import request from '../lib/request';
 import {
   shouldAuthorizationBeTested,
   removeTokenUser,
   getTokenAndUserId,
   generateRefreshToken,
 } from '../utils';
-import { HttpStatus } from '@nestjs/common';
-import { decode, JwtPayload } from 'jsonwebtoken';
-import { validate } from 'uuid';
 
 type UserTokens = {
   userId: string;
