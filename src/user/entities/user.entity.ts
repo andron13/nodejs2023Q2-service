@@ -1,5 +1,5 @@
-import { v4 as uuidv4 } from "uuid";
-import { getDateStamp } from "../../share/time";
+import { v4 as uuidv4 } from 'uuid';
+import { getDateStamp } from '../../share/time';
 
 export class User {
   readonly id: string; // uuid v4

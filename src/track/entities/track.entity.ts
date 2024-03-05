@@ -1,4 +1,4 @@
-import { v4 as uuidv4 } from "uuid";
+import { v4 as uuidv4 } from 'uuid';
 
 export class Track {
   readonly id: string; // uuid v4
@@ -7,7 +7,12 @@ export class Track {
   albumId: string | null; // refers to Album
   duration: number; // integer number
 
-  constructor(name: string, duration: number, artistId: string | null = null, albumId: string | null = null) {
+  constructor(
+    name: string,
+    duration: number,
+    artistId: string | null = null,
+    albumId: string | null = null,
+  ) {
     this.id = uuidv4();
     this.name = name;
     this.duration = duration;
