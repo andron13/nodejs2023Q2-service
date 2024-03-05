@@ -2,26 +2,44 @@ import { Injectable } from '@nestjs/common';
 
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { User } from './entities/user.entity';
+import { Database } from '../database/database';
 
 @Injectable()
 export class UserService {
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
-  }
+  constructor(private db: Database) {}
 
   findAll() {
-    return `This action returns all user`;
+    return this.db.users;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  create(createUserDto: CreateUserDto) {
+    const newUser = { ...createUserDto };
+    if (newUser instanceof User) {
+      this.db.users.push(newUser);
+    }
+    return newUser;
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  findOne(id: string) {
+    return this.db.users.find((user) => user.id === id);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  update(id: string, updateUserDto: UpdateUserDto) {
+    const userIndex = this.db.users.findIndex((user) => user.id === id);
+    if (userIndex === -1) {
+      throw new Error('User not found');
+    }
+    const updatedUser = { ...this.db.users[userIndex], ...updateUserDto };
+    this.db.users[userIndex] = updatedUser;
+    return updatedUser;
+  }
+
+  remove(id: string) {
+    const userIndex = this.db.users.findIndex((user) => user.id === id);
+    if (userIndex === -1) {
+      throw new Error('User not found');
+    }
+    return this.db.users.splice(userIndex, 1);
   }
 }
