@@ -13,12 +13,11 @@ export class UserService {
     return this.db.users;
   }
 
-  create(createUserDto: CreateUserDto) {
-    const newUser = { ...createUserDto };
-    if (newUser instanceof User) {
-      this.db.users.push(newUser);
-    }
-    return newUser;
+  create(createUserDto: CreateUserDto): Promise<User> {
+    const { login, password } = createUserDto;
+    const newUser = new User(login, password);
+    this.db.users.push(newUser);
+    return Promise.resolve(newUser);
   }
 
   findOne(id: string) {
