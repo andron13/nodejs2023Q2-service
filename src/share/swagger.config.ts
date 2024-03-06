@@ -1,10 +1,11 @@
 import { readFileSync } from 'fs';
-import { join } from 'path';
+import { join, normalize } from 'path';
 
 import * as YAML from 'yamljs';
 
+const pathToYaml: string = '../../doc/api.yaml';
 const yamlDocument = readFileSync(
-  join(__dirname, '../../doc/api.yaml'),
+  join(__dirname, normalize(pathToYaml)),
   'utf8',
 );
 export const swaggerConfig = YAML.parse(yamlDocument);
