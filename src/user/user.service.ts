@@ -1,4 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  HttpException,
+  HttpStatus,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -9,36 +15,60 @@ import { Database } from '../database/database';
 export class UserService {
   constructor(private db: Database) {}
 
-  findAll() {
+  async findAll(): Promise<User[]> {
     return this.db.users;
   }
-
-  create(createUserDto: CreateUserDto): Promise<User> {
+  async create(createUserDto: CreateUserDto): Promise<User> {
     const { login, password } = createUserDto;
+    if (this.existUser(login)) {
+      throw new HttpException('Login already exists', HttpStatus.BAD_REQUEST);
+    }
     const newUser = new User(login, password);
     this.db.users.push(newUser);
     return Promise.resolve(newUser);
   }
 
-  findOne(id: string) {
-    return this.db.users.find((user) => user.id === id);
+  async findOne(id: string): Promise<User> {
+    const user = this.db.users.find((user) => user.id === id);
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    return user;
   }
 
   update(id: string, updateUserDto: UpdateUserDto) {
     const userIndex = this.db.users.findIndex((user) => user.id === id);
     if (userIndex === -1) {
-      throw new Error('User not found');
+      throw new NotFoundException('User not found');
     }
-    const updatedUser = { ...this.db.users[userIndex], ...updateUserDto };
-    this.db.users[userIndex] = updatedUser;
-    return updatedUser;
+    const user = this.db.users[userIndex];
+
+    if (updateUserDto.oldPassword && updateUserDto.newPassword) {
+      if (user.password !== updateUserDto.oldPassword) {
+        throw new BadRequestException('Old password is incorrect');
+      }
+      user.password = updateUserDto.newPassword;
+    }
+
+    return user;
   }
 
   remove(id: string) {
     const userIndex = this.db.users.findIndex((user) => user.id === id);
     if (userIndex === -1) {
-      throw new Error('User not found');
+      throw new NotFoundException('User not found');
     }
-    return this.db.users.splice(userIndex, 1);
+    const [deletedUser] = this.db.users.splice(userIndex, 1);
+    return deletedUser;
+  }
+
+  /*
+   * Help methods
+   */
+
+  existUser(login: string) {
+    return this.db.users.find((user) => user.login === login);
   }
 }
