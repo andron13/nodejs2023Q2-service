@@ -8,7 +8,7 @@ import { User } from '../user/entities/user.entity';
 
 @Injectable()
 export class Database {
-  public users: User[] = mockUsers;
+  public users: User[] = [];
   albums: Album[] = [];
   artists: Artist[] = [];
   favorites: Favorite[] = [];

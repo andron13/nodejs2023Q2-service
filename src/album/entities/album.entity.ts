@@ -1,13 +1,11 @@
-import { v4 as uuidv4 } from 'uuid';
-
 export class Album {
-  readonly id: string; // uuid v4
+  readonly id: string; // crypto.randomUUID();
   name: string;
   year: number;
   artistId: string | null; // refers to Artist
 
   constructor(name: string, year: number, artistId: string | null = null) {
-    this.id = uuidv4();
+    this.id = crypto.randomUUID();
     this.name = name;
     this.year = year;
     this.artistId = artistId;

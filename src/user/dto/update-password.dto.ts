@@ -4,7 +4,7 @@ import { IsNotEmpty, IsString, MinLength } from 'class-validator';
 
 import { CreateUserDto } from './create-user.dto';
 
-export class UpdateUserDto extends PartialType(CreateUserDto) {
+export class UpdatePasswordDto extends PartialType(CreateUserDto) {
   @IsString()
   @IsNotEmpty()
   @MinLength(8)

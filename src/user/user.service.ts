@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { UpdatePasswordDto } from './dto/update-password.dto';
 import { User } from './entities/user.entity';
 import { Database } from '../database/database';
 
@@ -15,7 +15,7 @@ import { Database } from '../database/database';
 export class UserService {
   constructor(private db: Database) {}
 
-  async findAll(): Promise<User[]> {
+  findAll(): User[] {
     return this.db.users;
   }
   async create(createUserDto: CreateUserDto): Promise<User> {
@@ -38,7 +38,7 @@ export class UserService {
     return user;
   }
 
-  update(id: string, updateUserDto: UpdateUserDto) {
+  update(id: string, updateUserDto: UpdatePasswordDto): User {
     const userIndex = this.db.users.findIndex((user) => user.id === id);
     if (userIndex === -1) {
       throw new NotFoundException('User not found');

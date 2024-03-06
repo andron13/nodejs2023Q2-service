@@ -1,7 +1,5 @@
-import { v4 as uuidv4 } from 'uuid';
-
 export class Track {
-  readonly id: string; // uuid v4
+  readonly id: string; // crypto.randomUUID();
   name: string;
   artistId: string | null; // refers to Artist
   albumId: string | null; // refers to Album
@@ -13,7 +11,7 @@ export class Track {
     artistId: string | null = null,
     albumId: string | null = null,
   ) {
-    this.id = uuidv4();
+    this.id = crypto.randomUUID();
     this.name = name;
     this.duration = duration;
     this.artistId = artistId;
