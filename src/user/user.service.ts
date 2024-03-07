@@ -1,5 +1,5 @@
 import {
-  BadRequestException,
+  ForbiddenException,
   HttpException,
   HttpStatus,
   Injectable,
@@ -47,7 +47,7 @@ export class UserService {
 
     if (updateUserDto.oldPassword && updateUserDto.newPassword) {
       if (user.password !== updateUserDto.oldPassword) {
-        throw new BadRequestException('Old password is incorrect');
+        throw new ForbiddenException('Old password is incorrect');
       }
       user.password = updateUserDto.newPassword;
     }

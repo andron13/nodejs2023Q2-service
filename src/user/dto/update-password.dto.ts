@@ -7,11 +7,11 @@ import { CreateUserDto } from './create-user.dto';
 export class UpdatePasswordDto extends PartialType(CreateUserDto) {
   @IsString()
   @IsNotEmpty()
-  @MinLength(8)
+  @MinLength(3)
   oldPassword: string;
 
   @IsString()
   @IsNotEmpty()
-  @MinLength(8)
+  @MinLength(3)
   newPassword: string;
 }
