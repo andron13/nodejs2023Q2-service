@@ -1,6 +1,6 @@
 import { Exclude } from 'class-transformer';
-
 import { MinLength } from 'class-validator';
+import { v4 as uuidv4 } from 'uuid';
 
 import { getDateStamp } from '../../share/time';
 
@@ -17,7 +17,7 @@ export class User {
   updatedAt: number; // timestamp of last update
 
   constructor(login: string, password: string) {
-    this.id = crypto.randomUUID();
+    this.id = uuidv4();
     this.login = login;
     this.password = password;
     this.version = 1;

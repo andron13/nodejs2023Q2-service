@@ -75,7 +75,7 @@ export class UserController {
   @ApiResponse({ status: 404 })
   @Delete(':id')
   @HttpCode(StatusCodes.NO_CONTENT)
-  remove(@Param('id') id: string): User {
+  remove(@Param('id', ParseUUIDPipe) id: string): User {
     return this.userService.remove(id);
   }
 }

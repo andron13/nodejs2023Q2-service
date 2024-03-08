@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from 'uuid';
+
 import { UpdateArtistDto } from '../dto/update-artist.dto';
 
 export class Artist {
@@ -6,7 +8,7 @@ export class Artist {
   grammy: boolean;
 
   constructor(updateArtistDto: UpdateArtistDto) {
-    this.id = crypto.randomUUID();
+    this.id = uuidv4();
     Object.assign(this, updateArtistDto);
   }
 }
