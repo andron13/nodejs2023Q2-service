@@ -1,13 +1,12 @@
+import { request } from './lib';
 import { StatusCodes } from 'http-status-codes';
 import { validate } from 'uuid';
-
-import { albumsRoutes, artistsRoutes, tracksRoutes } from './endpoints';
-import { request } from './lib';
 import {
   getTokenAndUserId,
   shouldAuthorizationBeTested,
   removeTokenUser,
 } from './utils';
+import { albumsRoutes, artistsRoutes, tracksRoutes } from './endpoints';
 
 const createArtistDto = {
   name: 'TEST_artist',
