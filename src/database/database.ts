@@ -9,10 +9,10 @@ import { User } from '../user/entities/user.entity';
 @Injectable()
 export class Database {
   public users: User[] = [];
-  albums: Album[] = [];
-  artists: Artist[] = [];
-  favorites: Favorite[] = [];
-  tracks: Track[] = [];
+  public albums: Album[] = [];
+  public artists: Artist[] = [];
+  public favorites: Favorite[] = [];
+  public tracks: Track[] = [];
 }
 
 const mockUsers = [

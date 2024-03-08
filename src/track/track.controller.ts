@@ -13,6 +13,7 @@ import { StatusCodes } from 'http-status-codes';
 
 import { CreateTrackDto } from './dto/create-track.dto';
 import { UpdateTrackDto } from './dto/update-track.dto';
+import { Track } from './entities/track.entity';
 import { TrackService } from './track.service';
 
 @Controller('track')
@@ -20,7 +21,7 @@ export class TrackController {
   constructor(private readonly trackService: TrackService) {}
 
   @Get()
-  findAll() {
+  findAll(): Track[] {
     return this.trackService.findAll();
   }
 
@@ -44,7 +45,7 @@ export class TrackController {
 
   @Delete(':id')
   @HttpCode(StatusCodes.NO_CONTENT)
-  remove(@Param('id') id: string) {
+  remove(@Param('id', ParseUUIDPipe) id: string) {
     return this.trackService.remove(id);
   }
 }

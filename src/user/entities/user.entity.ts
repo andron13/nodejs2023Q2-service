@@ -1,11 +1,15 @@
 import { Exclude } from 'class-transformer';
 
+import { MinLength } from 'class-validator';
+
 import { getDateStamp } from '../../share/time';
 
 export class User {
   readonly id: string; // crypto.randomUUID();
+  @MinLength(3)
   login: string;
 
+  @MinLength(3)
   @Exclude()
   password: string;
   version: number; // integer number, increments on update
@@ -20,5 +24,11 @@ export class User {
     this.createdAt = getDateStamp();
     this.updatedAt = this.createdAt;
     console.log(this);
+  }
+
+  changePassword(newPassword: string) {
+    this.password = newPassword;
+    this.version++;
+    this.updatedAt = getDateStamp();
   }
 }

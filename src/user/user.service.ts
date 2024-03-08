@@ -49,7 +49,7 @@ export class UserService {
       if (user.password !== updateUserDto.oldPassword) {
         throw new ForbiddenException('Old password is incorrect');
       }
-      user.password = updateUserDto.newPassword;
+      user.changePassword(updateUserDto.newPassword);
     }
 
     return user;

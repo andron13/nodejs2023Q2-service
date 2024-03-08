@@ -1,20 +1,19 @@
+import { v4 as uuidv4 } from 'uuid';
+
+import { CreateTrackDto } from '../dto/create-track.dto';
+
 export class Track {
-  readonly id: string; // crypto.randomUUID();
+  readonly id: string;
   name: string;
+  duration: number; // integer number
   artistId: string | null; // refers to Artist
   albumId: string | null; // refers to Album
-  duration: number; // integer number
 
-  constructor(
-    name: string,
-    duration: number,
-    artistId: string | null = null,
-    albumId: string | null = null,
-  ) {
-    this.id = crypto.randomUUID();
-    this.name = name;
-    this.duration = duration;
-    this.artistId = artistId;
-    this.albumId = albumId;
+  constructor(createTrackDto: CreateTrackDto) {
+    this.id = uuidv4();
+    this.name = createTrackDto.name;
+    this.duration = createTrackDto.duration;
+    this.artistId = createTrackDto.artistId;
+    this.albumId = createTrackDto.albumId;
   }
 }
