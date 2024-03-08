@@ -1,11 +1,12 @@
+import { UpdateArtistDto } from '../dto/update-artist.dto';
+
 export class Artist {
-  readonly id: string; // crypto.randomUUID();
+  readonly id: string;
   name: string;
   grammy: boolean;
 
-  constructor(name: string, grammy: boolean) {
+  constructor(updateArtistDto: UpdateArtistDto) {
     this.id = crypto.randomUUID();
-    this.name = name;
-    this.grammy = grammy;
+    Object.assign(this, updateArtistDto);
   }
 }
