@@ -6,6 +6,7 @@ import {
   Delete,
   HttpCode,
   ParseUUIDPipe,
+  UnprocessableEntityException,
 } from '@nestjs/common';
 import { StatusCodes } from 'http-status-codes';
 
@@ -23,7 +24,9 @@ export class FavoritesController {
   // Artists Routing
   @Post('artist/:id')
   addArtist(@Param('id', ParseUUIDPipe) id: string) {
-    this.favoritesService.create(id, 'artists');
+    if (this.favoritesService.exist(id, 'artists'))
+      this.favoritesService.create(id, 'artists');
+    else throw new UnprocessableEntityException('User not found');
   }
 
   @Delete('artist/:id')
@@ -35,7 +38,9 @@ export class FavoritesController {
   // Albums Routing
   @Post('album/:id')
   addAlbum(@Param('id', ParseUUIDPipe) id: string) {
-    this.favoritesService.create(id, 'albums');
+    if (this.favoritesService.exist(id, 'albums'))
+      this.favoritesService.create(id, 'albums');
+    else throw new UnprocessableEntityException('User not found');
   }
 
   @Delete('album/:id')
@@ -47,7 +52,9 @@ export class FavoritesController {
   // Tracks Routing
   @Post('track/:id')
   addTrack(@Param('id', ParseUUIDPipe) id: string) {
-    this.favoritesService.create(id, 'tracks');
+    if (this.favoritesService.exist(id, 'tracks'))
+      this.favoritesService.create(id, 'tracks');
+    else throw new UnprocessableEntityException('User not found');
   }
 
   @Delete('track/:id')

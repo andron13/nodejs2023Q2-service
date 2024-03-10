@@ -49,4 +49,15 @@ export class Database {
       }
     });
   }
+
+  entityExist(id: string, type: 'artists' | 'albums' | 'tracks'): boolean {
+    switch (type) {
+      case 'artists':
+        return this.artists.some((artist) => artist.id === id);
+      case 'albums':
+        return this.albums.some((album) => album.id === id);
+      case 'tracks':
+        return this.tracks.some((track) => track.id === id);
+    }
+  }
 }
