@@ -27,6 +27,10 @@ export class ArtistService {
     return artist;
   }
 
+  public findMany(ids: string[]): Artist[] {
+    return this.db.artists.filter((artist) => ids.includes(artist.id));
+  }
+
   update(id: string, updateArtistDto: UpdateArtistDto): Artist {
     const artistIndex = this.db.artists.findIndex((artist) => artist.id === id);
     if (artistIndex === -1) {
@@ -43,6 +47,7 @@ export class ArtistService {
       throw new NotFoundException('Artist not found');
     }
     const [deletedArtist] = this.db.artists.splice(artistIndex, 1);
+    this.db.setArtistIdToNull(id);
     return deletedArtist;
   }
 }
