@@ -19,8 +19,8 @@ npm install
 
 ## Setting Up Environment Variables
 
-1. Create a new file named `.env` at the root directory of the project.
-2. Refer to the `.env.example` file provided in the root directory for the schema of key-value pairs needed inside `.env`.
+1. ❗ Create a new file named `.env` at the root directory of the project.
+2. 📌 Refer to the `.env.example` file provided in the root directory for the schema of key-value pairs needed inside `.env`.
 
 Remember to replace all keys with values specific to your environment or system. Never commit the `.env` with values to source control for security reasons.
 
@@ -71,9 +71,3 @@ npm run lint
 ```
 npm run format
 ```
-
-### Debugging in VSCode
-
-Press <kbd>F5</kbd> to debug.
-
-For more information, visit: https://code.visualstudio.com/docs/editor/debugging

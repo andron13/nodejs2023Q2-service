@@ -46,9 +46,7 @@ export class FavoritesService {
     }
   }
   getById(id: string, type: string) {
-    const entity = this.db[type].find((el) => el.id === id);
-    console.log({ entity });
-    return entity;
+    return this.db[type].find((el) => el.id === id);
   }
 
   setToNull(id: string, type: string) {

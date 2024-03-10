@@ -60,7 +60,7 @@ export class FavoritesController {
     return this.favServ.remove(id, 'tracks');
   }
 
-  postEntity(id, type) {
+  postEntity(id: string, type) {
     const doesEntityExistInDB = this.favServ.existInDb(id, type);
     const doesEntityIdExistInFavs = this.favServ.existInFavs(id, type);
     if (!doesEntityExistInDB) {
