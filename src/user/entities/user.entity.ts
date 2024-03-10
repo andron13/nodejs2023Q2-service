@@ -23,7 +23,6 @@ export class User {
     this.version = 1;
     this.createdAt = getDateStamp();
     this.updatedAt = this.createdAt;
-    console.log(this);
   }
 
   changePassword(newPassword: string) {

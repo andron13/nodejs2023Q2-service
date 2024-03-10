@@ -1,4 +1,3 @@
-type favType = 'artists' | 'albums' | 'tracks';
 export class Favorites {
   constructor(
     public artists: string[] = [],

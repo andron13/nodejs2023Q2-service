@@ -12,22 +12,21 @@ export class Database {
   public albums: Album[] = [];
   public artists: Artist[] = [];
   public tracks: Track[] = [];
-  public favorites: Favorites = new Favorites();
+  public favorites: Favorites = {
+    artists: [],
+    albums: [],
+    tracks: [],
+  };
 
   // в class Database
-  findAllFavArtists(): Artist[] {
-    return this.artists.filter((artist) =>
-      this.favorites.artists.includes(artist.id),
-    );
+  findAllFavArtists(ids: string[]): Artist[] {
+    return this.artists.filter((artist) => ids.includes(artist.id));
   }
-  findAllFavAlbums(): Album[] {
-    return this.albums.filter((album) =>
-      this.favorites.albums.includes(album.id),
-    );
+  findAllFavAlbums(ids: string[]): Album[] {
+    return this.albums.filter((album) => ids.includes(album.id));
   }
-  findAllFavTracks(): Track[] {
-    const favs = this.favorites.tracks;
-    return this.tracks.filter((track) => favs.includes(track.id));
+  findAllFavTracks(ids: string[]): Track[] {
+    return this.tracks.filter((track) => ids.includes(track.id));
   }
 
   setArtistIdToNull(artistId: string): void {
@@ -50,7 +49,7 @@ export class Database {
     });
   }
 
-  entityExist(id: string, type: 'artists' | 'albums' | 'tracks'): boolean {
+  entityExistInDB(id: string, type: 'artists' | 'albums' | 'tracks'): boolean {
     switch (type) {
       case 'artists':
         return this.artists.some((artist) => artist.id === id);

@@ -1,11 +1,11 @@
 import {
   Controller,
-  Get,
-  Post,
-  Param,
   Delete,
+  Get,
   HttpCode,
+  Param,
   ParseUUIDPipe,
+  Post,
   UnprocessableEntityException,
 } from '@nestjs/common';
 import { StatusCodes } from 'http-status-codes';
@@ -14,52 +14,62 @@ import { FavoritesService } from './favorites.service';
 
 @Controller('favs')
 export class FavoritesController {
-  constructor(private readonly favoritesService: FavoritesService) {}
+  constructor(private readonly favServ: FavoritesService) {}
 
   @Get()
   findAll() {
-    return this.favoritesService.findAll();
+    return this.favServ.findAll();
   }
 
   // Artists Routing
   @Post('artist/:id')
   addArtist(@Param('id', ParseUUIDPipe) id: string) {
-    if (this.favoritesService.exist(id, 'artists'))
-      this.favoritesService.create(id, 'artists');
-    else throw new UnprocessableEntityException('User not found');
+    const type = 'artists';
+    return this.postEntity(id, type);
   }
 
   @Delete('artist/:id')
   @HttpCode(StatusCodes.NO_CONTENT)
   removeArtist(@Param('id', ParseUUIDPipe) id: string) {
-    return this.favoritesService.remove(id, 'artists');
+    return this.favServ.remove(id, 'artists');
   }
 
   // Albums Routing
   @Post('album/:id')
   addAlbum(@Param('id', ParseUUIDPipe) id: string) {
-    if (this.favoritesService.exist(id, 'albums'))
-      this.favoritesService.create(id, 'albums');
-    else throw new UnprocessableEntityException('User not found');
+    const type = 'albums';
+    return this.postEntity(id, type);
   }
 
   @Delete('album/:id')
   @HttpCode(StatusCodes.NO_CONTENT)
   removeAlbum(@Param('id', ParseUUIDPipe) id: string) {
-    return this.favoritesService.remove(id, 'albums');
+    return this.favServ.remove(id, 'albums');
   }
 
   // Tracks Routing
   @Post('track/:id')
   addTrack(@Param('id', ParseUUIDPipe) id: string) {
-    if (this.favoritesService.exist(id, 'tracks'))
-      this.favoritesService.create(id, 'tracks');
-    else throw new UnprocessableEntityException('User not found');
+    const type = 'tracks';
+    return this.postEntity(id, type);
   }
 
   @Delete('track/:id')
   @HttpCode(StatusCodes.NO_CONTENT)
   removeTrack(@Param('id', ParseUUIDPipe) id: string) {
-    return this.favoritesService.remove(id, 'tracks');
+    return this.favServ.remove(id, 'tracks');
+  }
+
+  postEntity(id, type) {
+    const doesEntityExistInDB = this.favServ.existInDb(id, type);
+    const doesEntityIdExistInFavs = this.favServ.existInFavs(id, type);
+    if (!doesEntityExistInDB) {
+      throw new UnprocessableEntityException(`${type} not found`);
+    }
+    if (doesEntityIdExistInFavs) {
+      console.log(`${type}-id: ${id} Exist In Favs`);
+    }
+    this.favServ.create(id, type);
+    return this.favServ.getById(id, type);
   }
 }
