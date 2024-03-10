@@ -43,6 +43,7 @@ export class AlbumService {
       throw new NotFoundException('Album not found');
     }
     const [deletedAlbum] = this.db.albums.splice(albumIndex, 1);
+    this.db.setAlbumIdToNull(id);
     return deletedAlbum;
   }
 }

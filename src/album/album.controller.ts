@@ -9,7 +9,6 @@ import {
   ParseUUIDPipe,
   Put,
 } from '@nestjs/common';
-
 import { StatusCodes } from 'http-status-codes';
 
 import { AlbumService } from './album.service';
@@ -27,7 +26,7 @@ export class AlbumController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id', ParseUUIDPipe) id: string) {
     return this.albumService.findOne(id);
   }
 

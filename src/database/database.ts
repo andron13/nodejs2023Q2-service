@@ -42,4 +42,11 @@ export class Database {
       }
     });
   }
+  setAlbumIdToNull(albumId: string): void {
+    this.tracks.forEach((track) => {
+      if (track.albumId === albumId) {
+        track.albumId = null;
+      }
+    });
+  }
 }

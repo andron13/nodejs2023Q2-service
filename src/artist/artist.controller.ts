@@ -9,7 +9,6 @@ import {
   HttpCode,
   Put,
 } from '@nestjs/common';
-
 import { StatusCodes } from 'http-status-codes';
 
 import { ArtistService } from './artist.service';
