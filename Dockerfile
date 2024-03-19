@@ -1,26 +1,41 @@
-LABEL version="1.0" maintainer="andron13@gmail.com" description="RsSchool NodeJs Home Library Task" license="MIT" build-date="2024-03-12"
+ARG NODE_VERSION=20.0.0
 
-# FROM node:20.11-bullseye
-# FROM node:lts-bullseye
-# FROM node:lts-alpine3.18
+FROM node:${NODE_VERSION}-alpine as build-stage
 
-FROM node:20.11-bullseye-slim
+# add user to group
+RUN addgroup app && adduser -S -G app app
 
-RUN apt-get update && apt-get install -y --no-install-recommends dumb-init
+# set the working directory to /app
+WORKDIR /app
 
-ENV NODE_ENV production
-# ENV NPM_TOKEN 1234
+# copy package.json and package-lock.json to the working directory
+# This is done before copying the rest of the files to take advantage of Docker’s cache
+# If the package.json and package-lock.json files haven’t changed, Docker will use the cached dependencies
+COPY package*.json ./
 
-WORKDIR /usr/src/app
+# Run the application as a root user.
+USER root
 
-#COPY . /usr/src/app
-COPY --chown=node:node . .
+# change the ownership of the /app directory to the app user
+# chown -R <user>:<group> <directory>
+# chown command changes the user and/or group ownership of for given file.
+RUN chown -R app:app .
 
-# RUN echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > .npmrc && \
-   # npm ci --only=production
+# Run the application as a non-root user.
+USER app
 
-RUN npm ci --only=production
+# install dependencies and remove unnecessary files
+RUN npm ci && npm cache clean --force && rm -rf \
+    ./node_modules/.cache \
+    ./node_modules/.npm \
+    ./node_modules/.yarn \
+    ./node_modules/.pnpm
 
-USER node
+# Copy the rest of the source files into the image.
+COPY . .
 
-CMD ["dumb-init", "node", "start"]
+# Expose the port that the application listens on.
+EXPOSE ${PORT}
+
+# Run the application.
+CMD npx prisma generate && npm run start:dev
