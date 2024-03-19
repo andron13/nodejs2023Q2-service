@@ -1,4 +1,3 @@
-version: '3'
 services:
   postgres-db:
     user: postgres
@@ -11,7 +10,3 @@ services:
     restart: always
     ports:
       - ${POSTGRES_PORT}:${POSTGRES_PORT}
-    volumes:
-      - db-data:/var/lib/postgresql/data
-volumes:
-  db-data:

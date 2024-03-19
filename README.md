@@ -71,3 +71,6 @@ npm run lint
 ```
 npm run format
 ```
+
+
+npx prisma migrate dev --name init
