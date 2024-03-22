@@ -28,7 +28,7 @@ export class UserService {
     return Promise.resolve(newUser);
   }
 
-  async findOne(id: string): Promise<User> {
+  findOne(id: string): User {
     const user = this.db.users.find((user) => user.id === id);
 
     if (!user) {
