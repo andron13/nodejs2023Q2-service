@@ -8,59 +8,61 @@ import {
 
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdatePasswordDto } from './dto/update-password.dto';
-import { User } from './entities/user.entity';
-import { Database } from '../database/database';
+// import { User } from './entities/user.entity';
+// import { Database } from '../database/database';
+import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class UserService {
-  constructor(private db: Database) {}
+  constructor(private db: PrismaService) {}
 
-  findAll(): User[] {
-    return this.db.users;
+  async findAll() {
+    return this.db.user.findMany();
   }
-  async create(createUserDto: CreateUserDto): Promise<User> {
+
+  async create(createUserDto: CreateUserDto) {
     const { login, password } = createUserDto;
-    if (this.existUser(login)) {
+
+    if (await this.existUser(login)) {
       throw new HttpException('Login already exists', HttpStatus.BAD_REQUEST);
     }
-    const newUser = new User(login, password);
-    this.db.users.push(newUser);
-    return Promise.resolve(newUser);
+
+    return this.db.user.create({
+      data: createUserDto,
+    });
   }
 
-  findOne(id: string): User {
-    const user = this.db.users.find((user) => user.id === id);
-
+  async findOne(id: string) {
+    const user = this.db.user.findUnique({ where: { id } });
     if (!user) {
       throw new NotFoundException('User not found');
     }
-
     return user;
   }
 
-  update(id: string, updateUserDto: UpdatePasswordDto): User {
-    const userIndex = this.db.users.findIndex((user) => user.id === id);
-    if (userIndex === -1) {
+  async update(id: string, updateUserDto: UpdatePasswordDto) {
+    const userToUpdate = await this.db.user.findUnique({ where: { id } });
+    if (!userToUpdate) {
       throw new NotFoundException('User not found');
     }
-    const user = this.db.users[userIndex];
 
-    if (updateUserDto.oldPassword && updateUserDto.newPassword) {
-      if (user.password !== updateUserDto.oldPassword) {
-        throw new ForbiddenException('Old password is incorrect');
-      }
-      user.changePassword(updateUserDto.newPassword);
+    if (userToUpdate.password !== updateUserDto.oldPassword) {
+      throw new ForbiddenException('Old password is incorrect');
     }
 
-    return user;
+    const updatedUser = {
+      password: updateUserDto.newPassword,
+      version: { increment: 1 },
+      updatedAt: new Date(),
+    };
+    return this.db.user.update({ where: { id }, data: updatedUser });
   }
 
-  remove(id: string) {
-    const userIndex = this.db.users.findIndex((user) => user.id === id);
-    if (userIndex === -1) {
+  async remove(id: string) {
+    const deletedUser = await this.db.user.delete({ where: { id } });
+    if (!deletedUser) {
       throw new NotFoundException('User not found');
     }
-    const [deletedUser] = this.db.users.splice(userIndex, 1);
     return deletedUser;
   }
 
@@ -68,7 +70,10 @@ export class UserService {
    * Help methods
    */
 
-  existUser(login: string) {
-    return this.db.users.find((user) => user.login === login);
+  async existUser(login: string) {
+    const user = await this.db.user.findFirst({
+      where: { login: login },
+    });
+    return user !== null;
   }
 }

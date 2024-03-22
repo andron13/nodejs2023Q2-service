@@ -23,7 +23,9 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
+    "prisma:generate": "npx prisma generate",
     "prisma:migrate": "npx prisma migrate dev --name init",
+    "prisma:reset": "npx prisma migrate reset --force",
     "prisma:studio": "npx prisma studio"
   },
   "dependencies": {

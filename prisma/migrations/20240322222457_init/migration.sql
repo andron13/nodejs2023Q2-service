@@ -1,5 +1,5 @@
 -- CreateTable
-CREATE TABLE "PrismaUser" (
+CREATE TABLE "User" (
     "id" TEXT NOT NULL,
     "login" TEXT NOT NULL,
     "password" TEXT NOT NULL,
@@ -7,7 +7,7 @@ CREATE TABLE "PrismaUser" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updateAt" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "PrismaUser_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -17,7 +17,7 @@ CREATE TABLE "Track" (
     "duration" INTEGER NOT NULL,
     "artistId" TEXT,
     "albumId" TEXT,
-    "favorite" BOOLEAN NOT NULL DEFAULT false,
+    "isFav" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "Track_pkey" PRIMARY KEY ("id")
 );
@@ -27,7 +27,7 @@ CREATE TABLE "Artist" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "grammy" BOOLEAN NOT NULL,
-    "favorite" BOOLEAN NOT NULL DEFAULT false,
+    "isFav" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "Artist_pkey" PRIMARY KEY ("id")
 );
@@ -38,7 +38,7 @@ CREATE TABLE "Album" (
     "name" TEXT NOT NULL,
     "year" INTEGER NOT NULL,
     "artistId" TEXT,
-    "favorite" BOOLEAN NOT NULL DEFAULT false,
+    "isFav" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "Album_pkey" PRIMARY KEY ("id")
 );

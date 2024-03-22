@@ -25,14 +25,16 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get()
-  findAll(): Omit<User, 'password'>[] {
-    const users = this.userService.findAll();
+  async findAll(): Promise<Omit<User, 'password'>[]> {
+    const users = await this.userService.findAll();
     return users.map((user) => omitPassword(user));
   }
 
   @Get(':id')
-  findOne(@Param('id', ParseUUIDPipe) id: string): Omit<User, 'password'> {
-    const user = this.userService.findOne(id);
+  async findOne(
+    @Param('id', ParseUUIDPipe) id: string,
+  ): Promise<Omit<User, 'password'>> {
+    const user = await this.userService.findOne(id);
     return omitPassword(user);
   }
 

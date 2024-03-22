@@ -16,8 +16,8 @@ import { UserModule } from './user/user.module';
     ArtistModule,
     TrackModule,
     AlbumModule,
-    DatabaseModule,
     FavoritesModule,
+    DatabaseModule, // TODO
     PrismaModule,
   ],
   controllers: [AppController],
