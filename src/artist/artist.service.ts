@@ -7,14 +7,14 @@ import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class ArtistService {
-  constructor(private db: PrismaService) {}
-
-  async create(createArtistDto: CreateArtistDto): Promise<Artist> {
-    return this.db.artist.create({ data: createArtistDto });
-  }
+  constructor(private readonly db: PrismaService) {}
 
   async findAll(): Promise<Artist[]> {
     return this.db.artist.findMany();
+  }
+
+  async create(createArtistDto: CreateArtistDto): Promise<Artist> {
+    return this.db.artist.create({ data: createArtistDto });
   }
 
   async findOne(id: string): Promise<Artist> {

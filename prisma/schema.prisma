@@ -19,29 +19,35 @@ model User {
   password  String
   version   Int      @default(1)
   createdAt DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-}
-
-model Track {
-  id       String  @id @default(uuid())
-  name     String
-  duration Int
-  artistId String?
-  albumId  String?
-  isFav    Boolean @default(false)
+  updatedAt DateTime @updatedAt
 }
 
 model Artist {
-  id       String  @id @default(uuid())
-  name     String
-  grammy   Boolean
-  isFav    Boolean @default(false)
+  id     String   @id @default(uuid())
+  name   String
+  grammy Boolean
+  tracks Track[]
+  album  Album[]
+  isFav  Boolean? @default(false)
 }
 
 model Album {
-  id       String  @id @default(uuid())
+  id       String   @id @default(uuid())
   name     String
   year     Int
+  artist   Artist?  @relation(fields: [artistId], references: [id], onDelete: SetNull)
   artistId String?
-  isFav    Boolean @default(false)
+  tracks   Track[]
+  isFav    Boolean? @default(false)
+}
+
+model Track {
+  id       String   @id @default(uuid())
+  name     String
+  artist   Artist?  @relation(fields: [artistId], references: [id], onDelete: SetNull)
+  artistId String?
+  album    Album?   @relation(fields: [albumId], references: [id], onDelete: SetNull)
+  albumId  String?
+  duration Int
+  isFav    Boolean? @default(false)
 }

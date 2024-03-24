@@ -1,6 +1,5 @@
 import {
   Body,
-  // ClassSerializerInterceptor,
   Controller,
   Delete,
   Get,
@@ -9,7 +8,6 @@ import {
   ParseUUIDPipe,
   Post,
   Put,
-  // UseInterceptors,
 } from '@nestjs/common';
 import { StatusCodes } from 'http-status-codes';
 
@@ -19,7 +17,6 @@ import { User } from './entities/user.entity';
 import { UserService } from './user.service';
 import { dateTransformByUser, omitPassword } from '../share/entityMethods';
 
-// @UseInterceptors(ClassSerializerInterceptor)
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}

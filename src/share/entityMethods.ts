@@ -23,3 +23,10 @@ export const incrementTime = (oldTimeISO) => {
 
   return newTime.toISOString();
 };
+
+export const omitFavoritesId = <TEntity>(
+  entity: TEntity & { favoritesId: unknown },
+): Omit<TEntity, 'favoritesId'> => {
+  const { favoritesId, ...entityWithoutFavoritesId } = entity;
+  return entityWithoutFavoritesId;
+};

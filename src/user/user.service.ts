@@ -11,7 +11,7 @@ import { incrementTime } from '../share/entityMethods';
 
 @Injectable()
 export class UserService {
-  constructor(private db: PrismaService) {}
+  constructor(private readonly db: PrismaService) {}
 
   async findAll() {
     return this.db.user.findMany();

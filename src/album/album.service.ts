@@ -7,7 +7,7 @@ import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class AlbumService {
-  constructor(private db: PrismaService) {}
+  constructor(private readonly db: PrismaService) {}
 
   async findAll(): Promise<Album[]> {
     return this.db.album.findMany();

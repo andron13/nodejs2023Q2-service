@@ -8,5 +8,6 @@ import { PrismaModule } from '../prisma/prisma.module';
   imports: [PrismaModule],
   controllers: [AlbumController],
   providers: [AlbumService],
+  exports: [],
 })
 export class AlbumModule {}
