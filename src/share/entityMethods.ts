@@ -30,3 +30,10 @@ export const omitFavoritesId = <TEntity>(
   const { favoritesId, ...entityWithoutFavoritesId } = entity;
   return entityWithoutFavoritesId;
 };
+
+export function omitIsFav<TEntity extends { isFav: unknown }>(
+  entity: TEntity,
+): Omit<TEntity, 'isFav'> {
+  const { isFav, ...rest } = entity;
+  return rest;
+}
