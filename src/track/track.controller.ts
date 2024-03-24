@@ -9,8 +9,6 @@ import {
   Put,
   HttpCode,
   NotFoundException,
-  HttpException,
-  HttpStatus,
 } from '@nestjs/common';
 import { StatusCodes } from 'http-status-codes';
 

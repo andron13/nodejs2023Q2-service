@@ -8,6 +8,7 @@ import {
   HttpCode,
   ParseUUIDPipe,
   Put,
+  NotFoundException,
 } from '@nestjs/common';
 import { StatusCodes } from 'http-status-codes';
 
@@ -21,31 +22,37 @@ export class AlbumController {
   constructor(private readonly albumService: AlbumService) {}
 
   @Get()
-  findAll() {
+  async findAll(): Promise<Album[]> {
     return this.albumService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id', ParseUUIDPipe) id: string) {
+  async findOne(@Param('id', ParseUUIDPipe) id: string): Promise<Album> {
     return this.albumService.findOne(id);
   }
 
   @Post()
-  create(@Body() createAlbumDto: CreateAlbumDto) {
+  async create(@Body() createAlbumDto: CreateAlbumDto): Promise<Album> {
     return this.albumService.create(createAlbumDto);
   }
 
   @Put(':id')
-  update(
+  async update(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updateAlbumDto: UpdateAlbumDto,
-  ): Album {
-    return this.albumService.update(id, updateAlbumDto);
+  ): Promise<Album> {
+    try {
+      return this.albumService.update(id, updateAlbumDto);
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw new NotFoundException('Album not found');
+      }
+    }
   }
 
   @Delete(':id')
   @HttpCode(StatusCodes.NO_CONTENT)
-  remove(@Param('id', ParseUUIDPipe) id: string) {
+  async remove(@Param('id', ParseUUIDPipe) id: string): Promise<Album> {
     return this.albumService.remove(id);
   }
 }

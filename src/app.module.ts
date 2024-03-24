@@ -4,8 +4,7 @@ import { AlbumModule } from './album/album.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ArtistModule } from './artist/artist.module';
-import { DatabaseModule } from './database/database.module';
-import { FavoritesModule } from './favorites/favorites.module';
+// import { FavoritesModule } from './favorites/favorites.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { TrackModule } from './track/track.module';
 import { UserModule } from './user/user.module';
@@ -16,8 +15,7 @@ import { UserModule } from './user/user.module';
     ArtistModule,
     TrackModule,
     AlbumModule,
-    FavoritesModule,
-    DatabaseModule, // TODO
+    // FavoritesModule,
     PrismaModule,
   ],
   controllers: [AppController],
