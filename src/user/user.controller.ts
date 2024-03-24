@@ -1,15 +1,15 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Param,
-  Delete,
-  Put,
-  ParseUUIDPipe,
-  UseInterceptors,
   ClassSerializerInterceptor,
+  Controller,
+  Delete,
+  Get,
   HttpCode,
+  Param,
+  ParseUUIDPipe,
+  Post,
+  Put,
+  UseInterceptors,
 } from '@nestjs/common';
 import { StatusCodes } from 'http-status-codes';
 
@@ -38,15 +38,13 @@ export class UserController {
     return omitPassword(user);
   }
 
-  @Post() // create user (following DTO should be used) CreateUserDto
+  @Post()
   async create(
     @Body() createUserDto: CreateUserDto,
   ): Promise<Omit<User, 'password'>> {
     const newUser = await this.userService.create(createUserDto);
     const userOmitPassword = omitPassword(newUser);
-    const dateTransformed = dateTransformByUser(userOmitPassword);
-    console.log({ dateTransformed });
-    return dateTransformed;
+    return dateTransformByUser(userOmitPassword);
   }
 
   @Put(':id')
@@ -55,7 +53,8 @@ export class UserController {
     @Body() updateUserDto: UpdatePasswordDto,
   ): Promise<Omit<User, 'password'>> {
     const updatedUser = await this.userService.update(id, updateUserDto);
-    return omitPassword(updatedUser);
+    const userOmitPassword = omitPassword(updatedUser);
+    return dateTransformByUser(userOmitPassword);
   }
 
   @Delete(':id')

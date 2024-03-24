@@ -1,16 +1,13 @@
 import {
   ForbiddenException,
-  HttpException,
-  HttpStatus,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
 
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdatePasswordDto } from './dto/update-password.dto';
-// import { User } from './entities/user.entity';
-// import { Database } from '../database/database';
 import { PrismaService } from '../prisma/prisma.service';
+import { dateTransformByUser, incrementTime } from '../share/entityMethods';
 
 @Injectable()
 export class UserService {
@@ -21,27 +18,23 @@ export class UserService {
   }
 
   async create(createUserDto: CreateUserDto) {
-    // const { login, password } = createUserDto;
-    //
-    // if (await this.existUser(login)) {
-    //   throw new HttpException('Login already exists', HttpStatus.BAD_REQUEST);
-    // }
-
     return this.db.user.create({
       data: createUserDto,
     });
   }
 
   async findOne(id: string) {
-    const user = this.db.user.findUnique({ where: { id } });
+    const user = await this.db.user.findUnique({ where: { id } });
     if (!user) {
       throw new NotFoundException('User not found');
     }
+    console.log({ user });
     return user;
   }
 
   async update(id: string, updateUserDto: UpdatePasswordDto) {
     const userToUpdate = await this.db.user.findUnique({ where: { id } });
+    console.log({ userToUpdate });
     if (!userToUpdate) {
       throw new NotFoundException('User not found');
     }
@@ -50,20 +43,30 @@ export class UserService {
       throw new ForbiddenException('Old password is incorrect');
     }
 
+    const newDate = incrementTime(userToUpdate.updatedAt);
+
     const updatedUser = {
+      ...userToUpdate,
       password: updateUserDto.newPassword,
       version: { increment: 1 },
-      updatedAt: new Date(),
+      updatedAt: newDate,
     };
-    return this.db.user.update({ where: { id }, data: updatedUser });
+    const resultUser = await this.db.user.update({
+      where: { id },
+      data: updatedUser,
+    });
+    console.log({ resultUser });
+    return resultUser;
   }
 
   async remove(id: string) {
-    const deletedUser = await this.db.user.delete({ where: { id } });
-    if (!deletedUser) {
+    const userToRemove = await this.db.user.findUnique({ where: { id } });
+
+    if (!userToRemove) {
       throw new NotFoundException('User not found');
     }
-    return deletedUser;
+
+    return this.db.user.delete({ where: { id } });
   }
 
   /*

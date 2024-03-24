@@ -18,3 +18,15 @@ export const dateTransformByUser = (user) => {
 
   return updatedUser;
 };
+
+export const incrementTime = (oldTimeISO) => {
+  const oldTime = new Date(oldTimeISO);
+
+  // Добавляем 1000 миллисекунд == 1 секунда
+  const newTime = new Date(oldTime.getTime() + 1000);
+
+  // Переводим обратно в строку формата ISO
+  const newTimeISO = newTime.toISOString();
+
+  return newTimeISO;
+};
