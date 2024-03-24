@@ -7,7 +7,7 @@ import {
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdatePasswordDto } from './dto/update-password.dto';
 import { PrismaService } from '../prisma/prisma.service';
-import { dateTransformByUser, incrementTime } from '../share/entityMethods';
+import { incrementTime } from '../share/entityMethods';
 
 @Injectable()
 export class UserService {
@@ -28,13 +28,11 @@ export class UserService {
     if (!user) {
       throw new NotFoundException('User not found');
     }
-    console.log({ user });
     return user;
   }
 
   async update(id: string, updateUserDto: UpdatePasswordDto) {
     const userToUpdate = await this.db.user.findUnique({ where: { id } });
-    console.log({ userToUpdate });
     if (!userToUpdate) {
       throw new NotFoundException('User not found');
     }
@@ -55,7 +53,6 @@ export class UserService {
       where: { id },
       data: updatedUser,
     });
-    console.log({ resultUser });
     return resultUser;
   }
 
@@ -67,16 +64,5 @@ export class UserService {
     }
 
     return this.db.user.delete({ where: { id } });
-  }
-
-  /*
-   * Help methods
-   */
-
-  async existUser(login: string) {
-    const user = await this.db.user.findFirst({
-      where: { login: login },
-    });
-    return user !== null;
   }
 }

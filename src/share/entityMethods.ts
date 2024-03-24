@@ -1,5 +1,3 @@
-// import { User } from '../user/entities/user.entity';
-
 export const omitPassword = (user) => {
   const { password, ...userWithoutPassword } = user;
 
@@ -21,12 +19,7 @@ export const dateTransformByUser = (user) => {
 
 export const incrementTime = (oldTimeISO) => {
   const oldTime = new Date(oldTimeISO);
-
-  // Добавляем 1000 миллисекунд == 1 секунда
   const newTime = new Date(oldTime.getTime() + 1000);
 
-  // Переводим обратно в строку формата ISO
-  const newTimeISO = newTime.toISOString();
-
-  return newTimeISO;
+  return newTime.toISOString();
 };

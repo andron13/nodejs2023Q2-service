@@ -8,6 +8,9 @@ import {
   ParseUUIDPipe,
   Put,
   HttpCode,
+  NotFoundException,
+  HttpException,
+  HttpStatus,
 } from '@nestjs/common';
 import { StatusCodes } from 'http-status-codes';
 
@@ -21,31 +24,37 @@ export class TrackController {
   constructor(private readonly trackService: TrackService) {}
 
   @Get()
-  findAll(): Track[] {
+  async findAll(): Promise<Track[]> {
     return this.trackService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id', ParseUUIDPipe) id: string) {
+  async findOne(@Param('id', ParseUUIDPipe) id: string): Promise<Track> {
     return this.trackService.findOne(id);
   }
 
   @Post()
-  create(@Body() createTrackDto: CreateTrackDto) {
+  async create(@Body() createTrackDto: CreateTrackDto): Promise<Track> {
     return this.trackService.create(createTrackDto);
   }
 
   @Put(':id')
-  update(
+  async update(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updateTrackDto: UpdateTrackDto,
-  ) {
-    return this.trackService.update(id, updateTrackDto);
+  ): Promise<Track> {
+    try {
+      return await this.trackService.update(id, updateTrackDto);
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw new NotFoundException('Track not found');
+      }
+    }
   }
 
   @Delete(':id')
   @HttpCode(StatusCodes.NO_CONTENT)
-  remove(@Param('id', ParseUUIDPipe) id: string) {
+  async remove(@Param('id', ParseUUIDPipe) id: string): Promise<Track> {
     return this.trackService.remove(id);
   }
 }
