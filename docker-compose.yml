@@ -1,7 +1,20 @@
 services:
+  app:
+    image: node:20.9.0-alpine3.18
+    container_name: app
+    command: npm start
+    restart: always
+    build:
+      dockerfile: Dockerfile
+      context: .
+    ports:
+      - ${PORT}:${PORT}
+    networks:
+      - nodejs-service
+
   postgres-db:
     user: postgres
-    image: postgres:16.2-alpine3.18
+    image: postgres:${POSTGRES_VERSION}-${ALPINE_VERSION}
     container_name: "node-gmp-db"
     environment:
       - POSTGRES_USER=${POSTGRES_USER}
@@ -10,3 +23,9 @@ services:
     restart: always
     ports:
       - ${POSTGRES_PORT}:${POSTGRES_PORT}
+    networks:
+      - nodejs-service
+
+networks:
+  nodejs-service:
+    driver: bridge

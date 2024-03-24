@@ -1,10 +1,10 @@
-FROM node:alpine3.18
+FROM node:20.9.0-alpine3.18
 
 WORKDIR /app
 
 COPY ["package.json", "package-lock.json*", "./"]
 
-RUN npm ci && npm cache clean --force
+RUN npm install
 
 COPY . .
 
