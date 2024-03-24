@@ -21,11 +21,11 @@ export class UserService {
   }
 
   async create(createUserDto: CreateUserDto) {
-    const { login, password } = createUserDto;
-
-    if (await this.existUser(login)) {
-      throw new HttpException('Login already exists', HttpStatus.BAD_REQUEST);
-    }
+    // const { login, password } = createUserDto;
+    //
+    // if (await this.existUser(login)) {
+    //   throw new HttpException('Login already exists', HttpStatus.BAD_REQUEST);
+    // }
 
     return this.db.user.create({
       data: createUserDto,

@@ -17,7 +17,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdatePasswordDto } from './dto/update-password.dto';
 import { User } from './entities/user.entity';
 import { UserService } from './user.service';
-import { omitPassword } from '../share/omitPassword';
+import { dateTransformByUser, omitPassword } from '../share/entityMethods';
 
 @UseInterceptors(ClassSerializerInterceptor)
 @Controller('user')
@@ -39,23 +39,31 @@ export class UserController {
   }
 
   @Post() // create user (following DTO should be used) CreateUserDto
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
+  async create(
+    @Body() createUserDto: CreateUserDto,
+  ): Promise<Omit<User, 'password'>> {
+    const newUser = await this.userService.create(createUserDto);
+    const userOmitPassword = omitPassword(newUser);
+    const dateTransformed = dateTransformByUser(userOmitPassword);
+    console.log({ dateTransformed });
+    return dateTransformed;
   }
 
   @Put(':id')
-  update(
+  async update(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updateUserDto: UpdatePasswordDto,
-  ): Omit<User, 'password'> {
-    const updatedUser = this.userService.update(id, updateUserDto);
+  ): Promise<Omit<User, 'password'>> {
+    const updatedUser = await this.userService.update(id, updateUserDto);
     return omitPassword(updatedUser);
   }
 
   @Delete(':id')
   @HttpCode(StatusCodes.NO_CONTENT)
-  remove(@Param('id', ParseUUIDPipe) id: string): Omit<User, 'password'> {
-    const deletedUser = this.userService.remove(id);
+  async remove(
+    @Param('id', ParseUUIDPipe) id: string,
+  ): Promise<Omit<User, 'password'>> {
+    const deletedUser = await this.userService.remove(id);
     return omitPassword(deletedUser);
   }
 }
