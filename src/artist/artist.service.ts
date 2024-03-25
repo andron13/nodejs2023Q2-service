@@ -3,51 +3,44 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateArtistDto } from './dto/create-artist.dto';
 import { UpdateArtistDto } from './dto/update-artist.dto';
 import { Artist } from './entities/artist.entity';
-import { Database } from '../database/database';
+import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class ArtistService {
-  constructor(private db: Database) {}
+  constructor(private readonly db: PrismaService) {}
 
-  create(createArtistDto: CreateArtistDto): Artist {
-    const newArtist = new Artist(createArtistDto);
-    this.db.artists.push(newArtist);
-    return newArtist;
+  async findAll(): Promise<Artist[]> {
+    return this.db.artist.findMany();
   }
 
-  findAll(): Artist[] {
-    return this.db.artists;
+  async create(createArtistDto: CreateArtistDto): Promise<Artist> {
+    return this.db.artist.create({ data: createArtistDto });
   }
 
-  findOne(id: string): Artist {
-    const artist = this.db.artists.find((artist) => artist.id === id);
+  async findOne(id: string): Promise<Artist> {
+    const artist = await this.db.artist.findUnique({ where: { id } });
     if (!artist) {
       throw new NotFoundException('Artist not found');
     }
     return artist;
   }
 
-  public findMany(ids: string[]): Artist[] {
-    return this.db.artists.filter((artist) => ids.includes(artist.id));
-  }
-
-  update(id: string, updateArtistDto: UpdateArtistDto): Artist {
-    const artistIndex = this.db.artists.findIndex((artist) => artist.id === id);
-    if (artistIndex === -1) {
+  async update(id: string, updateArtistDto: UpdateArtistDto): Promise<Artist> {
+    const artistToUpdate = await this.db.artist.findUnique({ where: { id } });
+    if (!artistToUpdate) {
       throw new NotFoundException('Artist not found');
     }
-    const artist = this.db.artists[artistIndex];
-    Object.assign(artist, updateArtistDto);
-    return artist;
+    return this.db.artist.update({
+      where: { id },
+      data: updateArtistDto,
+    });
   }
 
-  remove(id: string): Artist {
-    const artistIndex = this.db.artists.findIndex((artist) => artist.id === id);
-    if (artistIndex === -1) {
+  async remove(id: string): Promise<Artist> {
+    const artistToRemove = await this.db.artist.findUnique({ where: { id } });
+    if (!artistToRemove) {
       throw new NotFoundException('Artist not found');
     }
-    const [deletedArtist] = this.db.artists.splice(artistIndex, 1);
-    this.db.setArtistIdToNull(id);
-    return deletedArtist;
+    return this.db.artist.delete({ where: { id } });
   }
 }

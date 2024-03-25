@@ -1,0 +1,17 @@
+.git
+.idea
+node_modules
+
+devtools
+readme
+
+.dockerignore
+.gitignore
+.npmrc
+.eslintignore
+.eslintrc.js
+.prettierrc
+.nvm-version
+
+npm-debug.log
+Dockerfile-V1

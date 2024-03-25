@@ -11,12 +11,6 @@
 git clone {repository URL}
 ```
 
-## Installing NPM modules
-
-```
-npm install
-```
-
 ## Setting Up Environment Variables
 
 1. ❗ Create a new file named `.env` at the root directory of the project.
@@ -26,8 +20,10 @@ Remember to replace all keys with values specific to your environment or system.
 
 ## Running application
 
-```
-npm start
+```bash
+docker-compose up 
+#or 
+npm run docker:compose
 ```
 
 After starting the app on port (4000 as default) you can open
@@ -71,3 +67,6 @@ npm run lint
 ```
 npm run format
 ```
+
+
+npx prisma migrate dev --name init

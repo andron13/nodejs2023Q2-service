@@ -3,47 +3,44 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
 import { Album } from './entities/album.entity';
-import { Database } from '../database/database';
+import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class AlbumService {
-  constructor(private db: Database) {}
+  constructor(private readonly db: PrismaService) {}
 
   async findAll(): Promise<Album[]> {
-    return this.db.albums;
+    return this.db.album.findMany();
   }
 
   async create(createAlbumDto: CreateAlbumDto): Promise<Album> {
-    const newAlbum = new Album(createAlbumDto);
-    this.db.albums.push(newAlbum);
-    return Promise.resolve(newAlbum);
+    return this.db.album.create({ data: createAlbumDto });
   }
 
   async findOne(id: string): Promise<Album> {
-    const album: Album = this.db.albums.find((album) => album.id === id);
+    const album: Album = await this.db.album.findUnique({ where: { id } });
     if (!album) {
       throw new NotFoundException('Album not found');
     }
     return album;
   }
 
-  update(id: string, updateAlbumDto: UpdateAlbumDto): Album {
-    const albumIndex = this.db.albums.findIndex((album) => album.id === id);
-    if (albumIndex === -1) {
+  async update(id: string, updateAlbumDto: UpdateAlbumDto): Promise<Album> {
+    const albumToUpdate = await this.db.album.findUnique({ where: { id } });
+    if (!albumToUpdate) {
       throw new NotFoundException('Album not found');
     }
-    const album = this.db.albums[albumIndex];
-    Object.assign(album, updateAlbumDto);
-    return album;
+    return this.db.album.update({
+      where: { id },
+      data: updateAlbumDto,
+    });
   }
 
-  remove(id: string): Album {
-    const albumIndex = this.db.albums.findIndex((album) => album.id === id);
-    if (albumIndex === -1) {
+  async remove(id: string): Promise<Album> {
+    const albumToRemove = await this.db.album.findUnique({ where: { id } });
+    if (!albumToRemove) {
       throw new NotFoundException('Album not found');
     }
-    const [deletedAlbum] = this.db.albums.splice(albumIndex, 1);
-    this.db.setAlbumIdToNull(id);
-    return deletedAlbum;
+    return this.db.album.delete({ where: { id } });
   }
 }

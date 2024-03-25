@@ -24,10 +24,4 @@ export class User {
     this.createdAt = getDateStamp();
     this.updatedAt = this.createdAt;
   }
-
-  changePassword(newPassword: string) {
-    this.password = newPassword;
-    this.version++;
-    this.updatedAt = getDateStamp();
-  }
 }

@@ -1,60 +1,108 @@
-import { Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnprocessableEntityException,
+} from '@nestjs/common';
 
-import { Album } from '../album/entities/album.entity';
-import { Artist } from '../artist/entities/artist.entity';
-import { Database } from '../database/database';
-import { Track } from '../track/entities/track.entity';
+import { PrismaService } from '../prisma/prisma.service';
+import { omitIsFav } from '../share/entityMethods';
 
 @Injectable()
 export class FavoritesService {
-  constructor(private db: Database) {}
+  constructor(private readonly db: PrismaService) {}
 
-  findAll() {
-    const artistsIDs: string[] = this.db.favorites.artists;
-    const albumsIDs: string[] = this.db.favorites.albums;
-    const tracksIDs: string[] = this.db.favorites.tracks;
-    const artists: Artist[] = this.db.findAllFavArtists(artistsIDs);
-    const albums: Album[] = this.db.findAllFavAlbums(albumsIDs);
-    const tracks: Track[] = this.db.findAllFavTracks(tracksIDs);
+  async getAll() {
+    const tracks = await this.db.track.findMany({
+      where: { isFav: true },
+    });
+    const albums = await this.db.album.findMany({
+      where: { isFav: true },
+    });
+    const artists = await this.db.artist.findMany({
+      where: { isFav: true },
+    });
     return {
-      artists,
-      albums,
-      tracks,
+      tracks: tracks.map((track) => omitIsFav(track)),
+      albums: albums.map((album) => omitIsFav(album)),
+      artists: artists.map((artist) => omitIsFav(artist)),
     };
   }
 
-  create(id: string, type: 'artists' | 'albums' | 'tracks') {
-    this.db.favorites[type].push(id);
-  }
-  remove(id: string, type: string) {
-    this.db.favorites[type] = this.db.favorites[type].filter((el) => el !== id);
-    this.setToNull(id, type);
-  }
-
-  existInDb(id: string, type: 'artists' | 'albums' | 'tracks'): boolean {
-    return this.db.entityExistInDB(id, type);
-  }
-
-  existInFavs(id: string, type: 'artists' | 'albums' | 'tracks'): boolean {
-    switch (type) {
-      case 'artists':
-        return this.db.favorites.artists.some((artistId) => artistId === id);
-      case 'albums':
-        return this.db.favorites.albums.some((albumId) => albumId === id);
-      case 'tracks':
-        return this.db.favorites.tracks.some((trackId) => trackId === id);
+  async addTrack(id: string) {
+    try {
+      return await this.db.track.update({
+        where: { id },
+        data: {
+          isFav: true,
+        },
+      });
+    } catch (e) {
+      throw new UnprocessableEntityException('Track not found');
     }
   }
-  getById(id: string, type: string) {
-    return this.db[type].find((el) => el.id === id);
+
+  async addArtist(id: string) {
+    try {
+      return await this.db.artist.update({
+        where: { id },
+        data: {
+          isFav: true,
+        },
+      });
+    } catch (e) {
+      throw new UnprocessableEntityException('Artist not found');
+    }
   }
 
-  setToNull(id: string, type: string) {
-    if (type === 'artists') {
-      this.db.setArtistIdToNull(id);
+  async addAlbum(id: string) {
+    try {
+      return await this.db.album.update({
+        where: { id },
+        data: {
+          isFav: true,
+        },
+      });
+    } catch (e) {
+      throw new UnprocessableEntityException('Album not found');
     }
-    if (type === 'albums') {
-      this.db.setAlbumIdToNull(id);
+  }
+
+  async deleteArtist(id: string) {
+    try {
+      return await this.db.artist.update({
+        where: { id },
+        data: {
+          isFav: false,
+        },
+      });
+    } catch (e) {
+      throw new NotFoundException('Artist not found');
+    }
+  }
+
+  async deleteTrack(id: string) {
+    try {
+      return await this.db.track.update({
+        where: { id },
+        data: {
+          isFav: false,
+        },
+      });
+    } catch (e) {
+      throw new NotFoundException('Track not found');
+    }
+  }
+
+  async deleteAlbum(id: string) {
+    try {
+      return await this.db.album.update({
+        where: { id },
+        data: {
+          isFav: false,
+        },
+      });
+    } catch (e) {
+      throw new NotFoundException('Album not found');
     }
   }
 }

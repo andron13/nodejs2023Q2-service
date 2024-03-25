@@ -1,12 +1,13 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Param,
+  Controller,
   Delete,
-  ParseUUIDPipe,
+  Get,
   HttpCode,
+  NotFoundException,
+  Param,
+  ParseUUIDPipe,
+  Post,
   Put,
 } from '@nestjs/common';
 import { StatusCodes } from 'http-status-codes';
@@ -21,31 +22,37 @@ export class ArtistController {
   constructor(private readonly artistService: ArtistService) {}
 
   @Get()
-  findAll() {
+  async findAll(): Promise<Artist[]> {
     return this.artistService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id', ParseUUIDPipe) id: string) {
+  async findOne(@Param('id', ParseUUIDPipe) id: string): Promise<Artist> {
     return this.artistService.findOne(id);
   }
 
   @Post()
-  create(@Body() createArtistDto: CreateArtistDto) {
+  async create(@Body() createArtistDto: CreateArtistDto): Promise<Artist> {
     return this.artistService.create(createArtistDto);
   }
 
   @Put(':id')
-  update(
+  async update(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updateArtistDto: UpdateArtistDto,
-  ): Artist {
-    return this.artistService.update(id, updateArtistDto);
+  ): Promise<Artist> {
+    try {
+      return this.artistService.update(id, updateArtistDto);
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw new NotFoundException('Track not found');
+      }
+    }
   }
 
   @HttpCode(StatusCodes.NO_CONTENT)
   @Delete(':id')
-  remove(@Param('id', ParseUUIDPipe) id: string) {
+  async remove(@Param('id', ParseUUIDPipe) id: string): Promise<Artist> {
     return this.artistService.remove(id);
   }
 }
