@@ -8,7 +8,6 @@ readme
 .dockerignore
 .gitignore
 .npmrc
-.env
 .eslintignore
 .eslintrc.js
 .prettierrc

@@ -26,7 +26,8 @@
     "prisma:generate": "npx prisma generate",
     "prisma:migrate": "npx prisma migrate dev --name init",
     "prisma:reset": "npx prisma migrate reset --force",
-    "prisma:studio": "npx prisma studio"
+    "prisma:studio": "npx prisma studio",
+    "start:migrate:dev": "npm run prisma:migrate && npm run start:dev"
   },
   "dependencies": {
     "@nestjs/common": "^10.3.5",

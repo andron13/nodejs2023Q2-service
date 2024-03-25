@@ -1,15 +1,15 @@
-FROM node:20.9.0-alpine3.18
+ARG NODE_VERSION=20.9.0
+
+FROM node:${NODE_VERSION}-alpine3.18
 
 WORKDIR /app
 
 COPY ["package.json", "package-lock.json*", "./"]
 
-RUN npm install
+RUN npm ci && npm cache clean --force
 
 COPY . .
 
-RUN npm run build
-
 EXPOSE ${PORT}
 
-CMD ["npm", "run", "start:dev"]
+CMD ["npm", "run", "start:migrate:dev"]

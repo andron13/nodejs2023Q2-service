@@ -1,6 +1,5 @@
 services:
   app:
-    image: node:20.9.0-alpine3.18
     container_name: app
     command: npm start
     restart: always
@@ -11,11 +10,19 @@ services:
       - ${PORT}:${PORT}
     networks:
       - nodejs-service
+    depends_on:
+      postgres-db:
+        condition: service_healthy
 
   postgres-db:
     user: postgres
-    image: postgres:${POSTGRES_VERSION}-${ALPINE_VERSION}
+    image: postgres:${POSTGRES_VERSION}
     container_name: "node-gmp-db"
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-U", "${POSTGRES_USER}", "-d", "${POSTGRES_DB}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     environment:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
