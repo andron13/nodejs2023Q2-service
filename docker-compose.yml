@@ -1,6 +1,6 @@
 services:
   app:
-    container_name: app
+    container_name: "basic-app"
     command: npm start
     restart: always
     build:
@@ -36,3 +36,4 @@ services:
 networks:
   nodejs-service:
     driver: bridge
+    name: rsschool-nodejs-bridge
