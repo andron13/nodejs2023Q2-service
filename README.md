@@ -26,8 +26,17 @@ Remember to replace all keys with values specific to your environment or system.
 
 ## Running application
 
-```
+
+
+```bash
+# postgres:db in docker
+docker compose up 
+#migrate prisma
+npm prisma:migrate
+# run start
 npm start
+#or 
+npm start:dev
 ```
 
 After starting the app on port (4000 as default) you can open
