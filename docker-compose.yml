@@ -1,7 +1,6 @@
 services:
   app:
     container_name: "basic-app"
-    command: npm start
     restart: always
     build:
       dockerfile: Dockerfile

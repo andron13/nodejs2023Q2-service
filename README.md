@@ -11,12 +11,6 @@
 git clone {repository URL}
 ```
 
-## Installing NPM modules
-
-```
-npm install
-```
-
 ## Setting Up Environment Variables
 
 1. ❗ Create a new file named `.env` at the root directory of the project.
@@ -26,17 +20,10 @@ Remember to replace all keys with values specific to your environment or system.
 
 ## Running application
 
-
-
 ```bash
-# postgres:db in docker
-docker compose up 
-#migrate prisma
-npm prisma:migrate
-# run start
-npm start
+docker-compose up 
 #or 
-npm start:dev
+npm run docker:compose
 ```
 
 After starting the app on port (4000 as default) you can open
